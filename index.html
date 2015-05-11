@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Inbox Demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Import Vaadin Grid -->
+        <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+        <link rel="import" href="bower_components/vaadin-components/vaadin-grid/vaadin-grid.html" />
+
+        <!-- Import fake backend -->
+        <script type="text/javascript" src="inbox.min.js"></script>
+
+        <!-- Import theme and additional elements -->
+        <link rel="stylesheet" type="text/css" href="inbox.css" />
+
+        <script type="text/javascript">
+            document.addEventListener('WebComponentsReady', function() {
+                'use strict';
+                var grid = document.getElementById('inbox-grid');
+
+                // Define the datasource.
+                var inbox = new Inbox(1000);
+                grid.data.source = function(request) {
+                    request.success(inbox.getData(request.index, request.count), inbox.size());
+                };
+
+                // Sort the "back-end".
+                grid.addEventListener('sort', function() {
+                    var sortProperty = grid.columns[grid.sortOrder[0].column].name;
+                    var sortDirection = grid.sortOrder[0].direction;
+                    inbox.sort(sortProperty, sortDirection);
+                });
+
+                // Define renderers.
+                grid.columns[0].renderer = function(cell) {
+                    var user = cell.data;
+                    cell.element.innerHTML = '<img class="from-photo" src="' + user.photo + '" />';
+                };
+                grid.columns[1].renderer = function(cell) {
+                    var row = cell.row.data;
+                    cell.element.innerHTML = '<span class="from">' + row.from.firstName + ' ' + row.from.lastName + '</span>';
+                    cell.element.innerHTML += '<span class="subject">' + row.summary + '</span>';
+                };
+                grid.columns[2].renderer = function(cell) {
+                    var row = cell.row.data;
+                    cell.element.innerHTML = '<span class="sent-date">' + row.sent.toLocaleDateString() + '</span>';
+
+                    var symbol = (row.starred ? '&#9733;' : '&#9734;');
+                    var className = (row.starred ? 'star-on' : 'star-off');
+                    cell.element.innerHTML += '<span class="star ' + className + '">' + symbol + '</span>';
+                };
+
+            	grid.header.hidden = true;
+
+                document.querySelector('button').addEventListener('click', function() {
+                    grid.scrollToRow(0);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <v-grid id="inbox-grid">
+            <table>
+                <colgroup>
+                    <col name="from" max-width="40" header-text="From">
+                    <col name="summary" header-text="Subject">
+                    <col name="starred" sortable="true" max-width="80" header-text="Starred">
+                </colgroup>
+            </table>
+        </v-grid>
+        <button id="top-button">&#x25B2;</button>
+    </body>
+</html>
