@@ -14,6 +14,6 @@
   ],
   "private": true,
   "dependencies": {
-    "vaadin-components": "~0.2.0"
+    "vaadin-components": "0.2.1-rc5"
   }
 }

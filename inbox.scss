@@ -13,11 +13,8 @@ v-grid td.v-grid-cell * {
     td.v-grid-cell {
         border-left: none !important;
         border-right: none !important;
-        padding: 12px !important;
-    }
-
-    .v-grid-row-stripe:not(.v-grid-row-selected) > td {
-        background: #fff;
+        min-height: 62px;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
     }
 
     .from,

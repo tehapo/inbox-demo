@@ -39,16 +39,25 @@
                 };
                 grid.columns[1].renderer = function(cell) {
                     var row = cell.row.data;
-                    cell.element.innerHTML = '<span class="from">' + row.from.firstName + ' ' + row.from.lastName + '</span>';
-                    cell.element.innerHTML += '<span class="subject">' + row.summary + '</span>';
+                    var innerHTML = '<div>';
+                    innerHTML += '<span class="from">' + row.from.firstName + ' ' + row.from.lastName + '</span>';
+                    innerHTML += '<span class="subject">' + row.summary + '</span>';
+                    innerHTML += '</div>';
+
+                    cell.element.innerHTML = innerHTML;
                 };
                 grid.columns[2].renderer = function(cell) {
                     var row = cell.row.data;
-                    cell.element.innerHTML = '<span class="sent-date">' + row.sent.toLocaleDateString() + '</span>';
+                    var innerHTML = '<div>';
+                    innerHTML += '<span class="sent-date">' + row.sent.toLocaleDateString() + '</span>';
 
                     var symbol = (row.starred ? '&#9733;' : '&#9734;');
                     var className = (row.starred ? 'star-on' : 'star-off');
-                    cell.element.innerHTML += '<span class="star ' + className + '">' + symbol + '</span>';
+                    innerHTML += '<span class="star ' + className + '">' + symbol + '</span>';
+                    innerHTML += '</div>';
+
+                    cell.element.innerHTML = innerHTML;
+
                 };
 
             	grid.header.hidden = true;
